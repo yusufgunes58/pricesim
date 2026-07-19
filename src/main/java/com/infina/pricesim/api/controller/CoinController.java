@@ -13,9 +13,12 @@ import com.infina.pricesim.state.SafeCoinState;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/coins")
+@Tag(name="Coins",
+description="About coins in details with stats ")
 public class CoinController {
 
     private final CoinService coinService;

@@ -11,9 +11,12 @@ import com.infina.pricesim.service.SimulationResultStore;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/stats")
+@Tag(name="Stats of simulation",
+description="Detailed stats and shows coins.")
 public class StatsController {
 
     private final SimulationResultStore simulationResultStore;

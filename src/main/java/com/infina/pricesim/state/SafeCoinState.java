@@ -4,6 +4,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.infina.pricesim.model.PriceUpdateTask;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(example = "Match UnsafeCoin info -> give this state some info")
 public class SafeCoinState extends CoinState {
 
 	private final ReentrantLock lock = new ReentrantLock();
