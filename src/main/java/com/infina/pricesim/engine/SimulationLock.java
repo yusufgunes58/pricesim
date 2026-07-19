@@ -13,7 +13,7 @@ public class SimulationLock {
 		return running.compareAndSet(false, true);
 	}
 
-	public void unLock() {
+	public void unlock() {
 		running.set(false);
 	}
 

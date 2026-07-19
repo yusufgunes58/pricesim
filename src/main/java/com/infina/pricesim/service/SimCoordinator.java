@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,7 +63,7 @@ public class SimCoordinator {
 	public void simulate(int updates, int workers, Long seed) throws InterruptedException {
 		
 		if(!simulationLock.tryLock()) {
-			throw new SimulationConflictException("A simulation is already running!");
+			throw new SimulationConflictException("Another simulation is already running!");
 		}
 		
 		try {
@@ -89,7 +90,7 @@ public class SimCoordinator {
 				);
 		
 		} finally {
-			simulationLock.unLock();
+			simulationLock.unlock();
 		}
 	}
 	
@@ -149,7 +150,17 @@ public class SimCoordinator {
 		
 		TaskQueue taskQueue = createTaskQueue(tasks);
 		
-		ExecutorService executor = Executors.newFixedThreadPool(workers);
+		ExecutorService executor = Executors.newFixedThreadPool(
+				workers,
+				new ThreadFactory() {
+						private int counter=1;
+					@Override
+					public Thread newThread(Runnable r) {
+						// TODO Auto-generated method stub
+						return new Thread(r, "CoinSim Worker-"+counter++ );
+					}
+					
+				});
 		
 		for(int i=0; i<workers; i++) {
 			executor.submit(new PriceWorker(taskQueue, counter, taskExecutor));
