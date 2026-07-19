@@ -34,7 +34,7 @@ public abstract class CoinState {
 			throw new IllegalArgumentException("Task coinId does not match this coin state");
 		}
 
-		this.currentPrice += task.delta();
+		this.currentPrice += task.delta();	
 		this.updateCount++;
 		this.lastDelta = task.delta();
 		this.lastUpdatedBy = Thread.currentThread().getName();

@@ -35,11 +35,19 @@ public class CoinService {
 	}
 
 	public SafeCoinState getSafeCoin(String coinId) {
-		return safeCoins.get(coinId);
+		SafeCoinState safeCoin = safeCoins.get(coinId);
+		if (safeCoin == null) {
+			throw new IllegalArgumentException("Coin ID not found: " + coinId);
+		}
+		return safeCoin;
 	}
 
 	public UnsafeCoinState getUnsafeCoin(String coinId) {
-		return unsafeCoins.get(coinId);
+		UnsafeCoinState unsafeCoin = unsafeCoins.get(coinId);
+		if (unsafeCoin == null) {
+			throw new IllegalArgumentException("Coin ID not found: " + coinId);
+		}	
+		return unsafeCoin;
 	}
 
 	public void reset() {
@@ -62,23 +70,52 @@ public class CoinService {
 		if (!compareCoinMaps()) {
 			throw new IllegalStateException("Safe and unsafe coin maps are not consistent");
 		}
-
 		return List.copyOf(safeCoins.keySet());
 	}
 
-	private boolean compareCoinMaps() {
-
-		if (safeCoins.size() != unsafeCoins.size()) {
-			return false;
+	public long getInitialPrice(String coinId) {
+		SafeCoinState safeCoin = safeCoins.get(coinId);
+		if (safeCoin != null) {
+			return safeCoin.getInitialPrice();
 		}
-
-		if (!safeCoins.keySet().equals(unsafeCoins.keySet())) {
-			return false;
-		}
-
-		return safeCoins.values().stream()
-				.allMatch(safe -> safe.getInitialPrice() == unsafeCoins.get(safe.getId()).getInitialPrice());
-
+		throw new IllegalArgumentException("Coin ID not found: " + coinId);
 	}
+	
+	// check for consistency between safeCoins and unsafeCoins maps
+	private boolean compareCoinMaps() {
+	    return checkSizeConsistency()
+	        && checkKeyConsistency()
+	        && checkPriceConsistency();
+	}
+
+	
+	// Check coin maps 
+	
+	private boolean checkSizeConsistency() {
+	    if (safeCoins.size() != unsafeCoins.size()) {
+	        System.err.println("Size mismatch: safe=" + safeCoins.size() + ", unsafe=" + unsafeCoins.size());
+	        return false;
+	    }
+	    return true;
+	}
+
+	private boolean checkKeyConsistency() {
+	    if (!safeCoins.keySet().equals(unsafeCoins.keySet())) {
+	        System.err.println("Key mismatch: safeKeys=" + safeCoins.keySet() + ", unsafeKeys=" + unsafeCoins.keySet());
+	        return false;
+	    }
+	    return true;
+	}
+
+	private boolean checkPriceConsistency() {
+	    boolean pricesMatch = safeCoins.values().stream()
+	            .allMatch(safe -> safe.getInitialPrice() == unsafeCoins.get(safe.getId()).getInitialPrice());
+	    if (!pricesMatch) {
+	        System.err.println("Price mismatch between safe and unsafe coin maps");
+	        return false;
+	    }
+	    return true;
+	}
+
 
 }
