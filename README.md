@@ -16,11 +16,17 @@ Java 21, Spring Boot, Maven, Git/GitHub, Swagger/OpenAPI, JUnit 5(not ready).
 
 ## Uygulamayı Çalıştırma
 
-1. `git clone <repo-linki>`
-2. IntelliJ ile açın (Open → `pom.xml`).
-3. `PriceSimApplication` çalıştırın (Shift+F10) **veya** `mvn spring-boot:run`
-4. `http://localhost:8081` üzerinde ayağa kalkar.
+# IntelliJ IDEA / Maven ile
+1. git clone https://github.com/yusufgunes58/pricesim.git
+2. Projeyi IntelliJ IDEA ile açın (Open → pom.xml).
+3. PricesimApplication sınıfını çalıştırın.
 
+# Docker Compose ile
+Docker kuruluysa, Java veya Maven kurulumu gerekmeden:
+1. git clone https://github.com/yusufgunes58/pricesim.git
+2. cd pricesim
+3. docker compose up --build
+4. 
 ## Swagger Adresi
 
 - http://localhost:8080/swagger-ui/index.html

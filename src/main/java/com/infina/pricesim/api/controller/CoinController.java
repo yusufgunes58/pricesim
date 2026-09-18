@@ -2,6 +2,7 @@ package com.infina.pricesim.api.controller;
 
 import java.util.List;
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +37,11 @@ public class CoinController {
     @GetMapping
     public ResponseEntity<List<SafeCoinState>> getCoins() {
         return ResponseEntity.ok(coinService.getSafeCoins());
+    }
+
+    @PostMapping("/id/price")
+    public ResponseEntity<String> addCoin(@RequestParam String id, @RequestParam long price) {
+        coinService.addCoin(id, price);
+        return ResponseEntity.ok("Coin added successfully, Id:"+id+"\tPrice: "+price);
     }
 }
